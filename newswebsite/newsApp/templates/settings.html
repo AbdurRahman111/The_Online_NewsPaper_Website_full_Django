@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+
+{%block title%}{% endblock %}
+
+
+{%block body%}
+
+
+
+<div class="container pt-5">
+<h3>Hi {{request.user}}, This is Your Settings !!</h3>
+<h5>{{request.user}}, You can Upload you Profile Picture Here !!</h5>
+</div>
+</br></br>
+</br>
+<form class="container" action="settings" method="POST">{% csrf_token %}
+
+  <button class="btn btn-success" name="get_email" type="submit" value="{{request.user}}">Edit Profile </button>
+
+</form>
+
+</br>
+
+
+
+
+<table class="table container">
+
+  <tbody>
+    <tr>
+      <th scope="row" rowspan="5" style="text-align: center; vertical-align: middle;">
+
+        <form action="settings" method="POST">{% csrf_token %}
+          <div class="form-group">
+            <label for="exampleFormControlFile1">Upload Image</label>
+            <input name="upload_image" type="image" class="form-control-file" id="exampleFormControlFile1">
+          </div>
+
+            <button type="submit" class="btn btn-outline-info">Upload</button>
+        </form>
+
+      </th>
+      <td>User Name :</td>
+      <td>
+        {% if aa %}
+
+        {{aa}}
+      {% else %}
+        Click Edit Profile
+
+        {% endif %}
+
+      </td>
+
+    </tr>
+    <tr>
+
+      <td>Phone Number :</td>
+      <td>{% if bb %}
+
+        {{bb}}
+      {% else %}
+        Click Edit Profile
+
+        {% endif %}</td>
+
+    </tr>
+    <tr>
+
+      <td>Email :</td>
+      <td>
+
+      {% if ff %}
+
+        {{ff}}
+      {% else %}
+        Click Edit Profile
+
+        {% endif %}
+      </td>
+
+    </tr>
+
+    <tr>
+
+      <td>Date of Birth :</td>
+      <td>{% if cc %}
+
+        {{cc}}
+      {% else %}
+        Click Edit Profile
+
+        {% endif %}</td>
+
+    </tr>
+
+    <tr>
+
+      <td>Password (Hashed) : </td>
+      <td>************</td>
+
+    </tr>
+  </tbody>
+</table>
+</br></br>
+
+
+
+<div class="container"><hr></div>
+
+
+
+
+
+
+
+
+{% endblock %}

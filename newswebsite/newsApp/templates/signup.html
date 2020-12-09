@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<div class="container">
+	<div class="col-lg-5 mx-auto mt-5 border rounded pt-4">
+		<h4 class="alert alert-success border rounded">Create an Account</h4>
+
+		{% if messages  %}
+		{% for message in messages %}
+
+		<div class="alert alert-danger" role="alert">
+		  {{message}}
+		</div>
+
+		{% endfor %}
+
+		{% endif %}
+
+
+		<form action="signup" method="POST">
+			{% csrf_token %}
+
+			<div class="form-group">
+			    <label for="exampleFormControlInput1">Username (It Will need to login)</label>
+			    <input  type="text" value="{{value.name}}" name="user_name" class="form-control" id="exampleFormControlInput1" required>
+			</div>
+
+
+
+			<div class="form-group">
+			    <label for="exampleFormControlInput1">Phone</label>
+			    <input  type="text" value="{{valus.phone2}}" name="user_phone" class="form-control" id="exampleFormControlInput3" placeholder="76544366677" required>
+			</div>
+
+			<div class="form-group">
+			    <label for="exampleFormControlInput1">Email address</label>
+			    <input  type="email" value="{{valus.email2}}" name="user_email" class="form-control" id="exampleFormControlInput4" placeholder="name@example.com" required>
+			</div>
+
+            <div class="form-group">
+			    <label for="exampleFormControlInput7">Date Of Birth</label>
+			    <input  type="date" value="{{valus.phone2}}" name="User_Date" class="form-control" id="exampleFormControlInput7" placeholder="" required>
+			</div>
+
+			<div class="form-group">
+			    <label for="exampleFormControlInput1">Password</label>
+			    <input  type="password" name="user_password" class="form-control" id="exampleFormControlInput5" placeholder="********" required>
+			</div>
+
+			<div class="form-group">
+			    <label for="exampleFormControlInput1">Confirm Password</label>
+			    <input  type="password" name="user_password_confirm" class="form-control" id="exampleFormControlInput6" placeholder="********" required>
+			</div>
+
+			<div class="form-group">
+			    <input class="btn btn-info" type="submit" value="Create an Account">
+			</div>
+			
+
+		</form>
+	</div>
+</div>
+
+
+{% endblock %}

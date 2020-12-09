@@ -1,0 +1,179 @@
+
+
+{% extends 'base.html' %}
+
+
+{%block title%}{% endblock %}
+
+{%block body%}
+
+{% load humanize %}
+{% load get_dict %}
+
+{% if messages %}
+{% for message in messages %}
+
+
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+  <strong>WellDone!</strong> {{message}}
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+{% endfor %}
+{% endif %}
+
+
+<div class="container pt-5">
+<h2><b>Online Newspaper</b></h2>
+<hr class="my-4">
+
+
+<h4><b>Report By : {{post.Repoter_name}}</b></h4>
+<small>Post Date : {{post.publish}}</small>
+<hr class="my-4">
+</div>
+
+
+<div class="container mt-5">
+
+    <div class="card mr-3 mt-5 pt-5 pl-4 pr-4" style="width: 68rem;">
+					  <img src="/media/{{post.image}}" class="card-img-top" alt="...">
+					  <div class="card-body">
+					    <h5 class="card-title">{{post.name_news}}</h5>
+					    <p class="card-text"><small>post Category : {{post.catagory}}
+							</br>Post Date : {{post.publish}}</small></p></br>
+					    <p class="card-text">{{post.description }}</p>
+
+
+					  </div>
+					</div></div></br></br>
+
+
+
+<div class="container"><hr class="my-4"><h2>Comments</h2></div>
+</br>
+
+{% if user.is_authenticated %}
+<form class="form-inline container" method="POST" action="/postComments">{% csrf_token %}
+
+	<div class="form-group mx-sm-3 mb-2">
+
+
+		<input name="comment" type="text" class="form-control" placeholder="Comment Here">
+		<input name="postId" type="hidden" value="{{post.id}}">
+		<input name="serial_no" type="hidden" value="">
+
+		<input name="comment_username" type="hidden" value="{{request.user}}">
+
+	</div>
+	<button type="submit" class="btn btn-outline-success mb-2 ml-2">Submit</button>
+</form>
+
+{% else %}
+
+<form class="container">
+  <fieldset disabled>
+    <div class="form-group">
+
+
+      <input type="text" id="disabledTextInput" class="form-control" placeholder="You can't Comment, You Have To login Login First !!!">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </fieldset>
+	</br>
+	<a href="login" class="btn btn-sm btn-outline-success">Login</a>
+	<a href="signup" class="btn btn-sm btn-outline-success">SignUp</a>
+
+</form>
+
+{% endif %}
+
+<div class="container"><hr>
+
+
+	{% for comment in comments %}
+
+	<div class="row my-3">
+		<div class="col-md-1"><img src="/media/uploads/user.png" class="rounded mx-auto d-block" alt="user" width="50px" height="40px"></div>
+		<div class="col-md-11"><b>{{comment.user}}</b> <small> <span class="badge badge-secondary">{{comment.time_comment | naturalday}}</span> ({{comment.time_comment}})</small>
+			<div>{{comment.comment}}</div>
+
+			<div class="reply mx-0">
+
+
+				  <button class="btn btn-sm btn-outline-primary mt-4" type="button" data-toggle="collapse" data-target="#reply{{comment.serial_no}}" aria-expanded="false" aria-controls="reply{{comment.serial_no}}">
+					Reply
+				  </button>
+
+				<div class="collapse" id="reply{{comment.serial_no}}">
+				  <div class="card card-body my-2">
+
+					  {% if user.is_authenticated %}
+					<form class="form-inline container" method="POST" action="/postComments">{% csrf_token %}
+
+						<div class="form-group mx-sm-3 mb-2">
+
+
+							<input name="comment" type="text" class="form-control" placeholder="Reply a comment">
+							<input name="serial_no" type="hidden" value="{{comment.serial_no}}">
+							<input name="postId" type="hidden" value="{{post.id}}">
+
+							<input name="comment_username" type="hidden" value="{{request.user}}">
+
+						</div>
+						<button type="submit" class="btn btn-outline-success mb-2 ml-2">Submit</button>
+					</form>
+					  {% else %}
+
+					  <form class="container">
+						  <fieldset disabled>
+							<div class="form-group">
+
+
+							  <input type="text" id="disabledTextInput2" class="form-control" placeholder="You can't Reply, You Have To login First !!!">
+							</div>
+
+							<button type="submit" class="btn btn-primary">Submit</button>
+						  </fieldset>
+						</form>
+
+
+
+					  {% endif %}
+				  </div>
+				</div>
+
+				<div class="replies my-3">
+					{% for replycomment in repDict|get_value:comment.serial_no %}
+					<div class="row">
+						<div class="col-md-1 pl-5"><img src="/media/uploads/user.png" class="rounded mx-auto d-block" alt="user" width="40px" height="30px"></div>
+						<div class="col-md-11"><b>{{replycomment.user}}</b> <small> <span class="badge badge-secondary">{{replycomment.time_comment | naturalday}}</span> ({{replycomment.time_comment}})</small>
+			<div>{{replycomment.comment}}</div></div>
+
+					</div>
+
+
+					</br>
+
+
+					{% endfor %}
+					</div>
+
+
+			</div>
+
+		</div>
+	</div>
+
+	{% endfor %}
+</div>
+
+</br></br></br></br></br>
+
+
+
+
+{% endblock %}

@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+
+
+{%block title%}The Online Newspaper{% endblock %}
+
+{%block body%}
+
+
+{% if messages %}
+{% for message in messages %}
+
+
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+  <strong>WellDone!</strong> {{message}}
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+{% endfor %}
+{% endif %}
+
+{% if user.is_authenticated %}
+
+{% else %}
+<div class="jumbotron">
+  <h1 class="display-4">Wellcome to online newspaper !!!</h1>
+  <p class="lead">This is a newspaper website!!</p>
+  <hr class="my-4">
+  <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+  <a class="btn btn-success btn-lg" href="login" role="button">Login</a>
+  <a class="btn btn-primary btn-lg" href="signup" role="button">SignUp</a>
+
+</div>
+{% endif %}
+
+
+
+
+<div class="container-flot">
+	<div class="row pt-5">
+
+		<div class="col-lg-2 ml-4">
+			<div class="list-group mt-4 mx-auto pl-3">
+
+				<a href="/" class="list-group-item list-group-item-action">
+			    All News
+			  </a>
+
+				{% for i in prodcats %}
+			  <a href="/?category={{i.id}}" class="list-group-item list-group-item-action">
+			    {{i.catagory_name}}
+			  </a>
+			  {% endfor %}
+
+			</div>
+
+		</div>
+
+		<div class="col-lg-9 mx-auto">
+			<div class="container-flot">
+
+				<div class="row pt-2">
+					{% for i in prod %}
+					<div class="card mr-3 mt-4" id="{{i.id}}" style="width: 20rem;">
+						<span class="pt-1 pl-2"><small>Post : {{i.publish}}</small></span><hr>
+
+
+					  <span class="pl-1 pr-1"> <img src="/media/{{i.image}}" class="card-img-top" alt="..." width="100" height="220"></span>
+
+
+					  <div class="card-body">
+					    <h5 class="card-title"><a href="/{{i.slug}}">{{i.name_news | truncatechars:86 }}</a></h5>
+					    <p class="card-text"><small>Repoter : {{i.Repoter_name}}</br>Category : {{i.catagory}}</br></br></small></p>
+
+						  <p>{{i.description | truncatechars:60}}  <a href="/{{i.slug}}">read more</a></p>
+						  <hr>
+						  <hr>
+
+							{% if user.is_authenticated %}
+							  {% for allnews in allPosts %}
+								<form action="{% url 'like_post' %}" method="POST" class="ui form">{% csrf_token %}
+										<input name="post_id" type="hidden" value="{{allnews.id}}">
+
+
+
+										{% if user not in allnews.likes.all %}
+										<button type="submit" class="btn btn-success btn-sm">Like({{allnews.likes.all.count}})</button>
+
+
+										{% else %}
+										<button type="submit" class="btn btn-danger btn-sm">Liked({{allnews.likes.all.count}})</button>
+										{% endif %}
+
+									</form><hr>
+						  		{% endfor %}
+
+						  {% else %}
+
+						  {% for allnews in allPosts %}
+								<form class="ui form">
+										<input name="post_id" type="hidden" value="{{allnews.id}}">
+
+
+
+										{% if user not in allnews.likes.all %}
+
+										<!-- Button trigger modal -->
+										<button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#exampleModal">
+										  Like({{allnews.likes.all.count}})
+										</button>
+
+										<!-- Modal -->
+										<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+										  <div class="modal-dialog">
+											<div class="modal-content">
+											  <div class="modal-header">
+												<h5 class="modal-title" id="exampleModalLabel">You Have To Login First !!</h5>
+												<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												  <span aria-hidden="true">&times;</span>
+												</button>
+											  </div>
+											  <div class="modal-body">
+												You can't Like, You Have To login Login First !!!
+											  </div>
+											  <div class="modal-footer">
+												<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+											  </div>
+											</div>
+										  </div>
+										</div>
+
+
+										{% else %}
+
+										{% endif %}
+
+									</form><hr>
+						  		{% endfor %}
+
+						  {% endif %}
+							  <a href="/{{i.slug}}" class="btn btn-outline-success"><small>See All Comments</small></a>
+
+
+
+
+
+
+
+					  </div>
+
+					</div>
+
+					{% endfor %}
+
+
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+</div>
+
+
+
+
+
+
+{% endblock %}
